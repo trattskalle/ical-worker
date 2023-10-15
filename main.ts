@@ -1,8 +1,8 @@
 import {
-  Event,
-  EventConfig,
   Calendar,
-} from 'https://deno.land/x/simple_ics@0.0.11/mod.ts';
+  EventConfig,
+  Event,
+} from 'https://cdn.jsdelivr.net/gh/lindskogen/simple-ics/mod.ts';
 
 const NEWLINE = "\\n";
 const drop = "💧";
@@ -60,7 +60,7 @@ Palettblad
 */
 const createPalettbladRepeatedEvent = ([y, m, d]: [number, number, number] = originDate): EventConfig => ({
   title: 'Dags att vattna: Palettblad',
-  desc: renderWaterLevel(1) +`\nEj mycket vatten\nJorden skall hållas lätt fuktig`.replaceAll('\n', NEWLINE),
+  desc: renderWaterLevel(1) + `\nEj mycket vatten\nJorden skall hållas lätt fuktig`.replaceAll('\n', NEWLINE),
   beginDate: [y, m, d],
   endDate: [y, m, d + 1],
   rrule: {
@@ -97,10 +97,6 @@ const createElefantoeraRepeatedEvent = ([y, m, d]: [number, number, number] = or
 
 
 const eventConfigCreators = [createStrandkastanjRepeatedEvent, createMonsteraRepeatedEvent, createPalettbladRepeatedEvent, createElefantoeraRepeatedEvent]
-
-
-
-
 
 
 Deno.serve((req: Request) => {
