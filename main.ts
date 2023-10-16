@@ -1,106 +1,93 @@
-import {
-  Calendar,
-  EventConfig,
-  Event,
-} from 'https://cdn.jsdelivr.net/gh/lindskogen/simple-ics/mod.ts';
+import { Calendar, Event, EventConfig, RecurrenceRule } from 'https://cdn.jsdelivr.net/gh/lindskogen/simple-ics/mod.ts';
 
-const NEWLINE = "\\n";
-const drop = "💧";
-const originDate: [number, number, number] = [2023, 10, 16];
+type DateTriple = [number, number, number];
 
-const renderWaterLevel = (count: number) => drop.repeat(count);
+const ORIGIN_DATE: DateTriple = [2023, 10, 16];
 
-/*
-Strandkastanj
-  Låt jorden torka mellan vattningarna
-  En generös klunk vatten var tredje vecka
-  Spraya med ljummet vatten
-  Fläta!
- */
-const createStrandkastanjRepeatedEvent = ([y, m, d]: [number, number, number] = originDate): EventConfig => ({
-  title: 'Strandkastanj',
-  desc: renderWaterLevel(5) + `\nEn generös klunk vatten var tredje vecka\nLåt jorden torka mellan vattningarna\nSpraya med ljummet vatten`.replaceAll('\n', NEWLINE),
+interface RepeatConfig {
+  freq: RecurrenceRule["freq"];
+  interval: number;
+}
+
+interface Plant extends RepeatConfig {
+  title: string;
+  description: string[];
+}
+
+const createRepeatedEvent = (
+  {description, interval, freq, title}: Plant,
+  [y, m, d]: DateTriple
+): EventConfig => ({
+  title: title,
+  desc: [renderWaterLevel(interval), ...description].join('\\n'),
   beginDate: [y, m, d],
   endDate: [y, m, d + 1],
-  rrule: {
-    freq: 'WEEKLY',
-    interval: 3
-  },
+  rrule: {freq, interval},
   alarm: {
-    desc: 'Dags att vattna: Strandkastanj',
-    advance: 0
+    desc: `Dags att vattna: ${title}`,
+    advance: 0,
   },
 });
 
-/*
-Monstera
-  Spraya bladen oftare
-  Vattna 2-3 ggr i månaden
-  Inte direkt solljus
-*/
-const createMonsteraRepeatedEvent = ([y, m, d]: [number, number, number] = originDate): EventConfig => ({
-  title: 'Monstera',
-  desc: renderWaterLevel(2) + '\nSpraya bladen oftare'.replaceAll('\n', NEWLINE),
-  beginDate: [y, m, d],
-  endDate: [y, m, d + 1],
-  rrule: {
-    freq: 'WEEKLY',
-    interval: 2
-  },
-  alarm: {
-    desc: 'Dags att vattna: Strandkastanj',
-    advance: 0
-  },
-});
+const renderWaterLevel = (count: number) => "💧".repeat(count);
 
-/*
-Palettblad
-  Ej mycket vatten, men lite och ofta (jorden skall vara lätt fuktig)
-  Gillar ljus
-*/
-const createPalettbladRepeatedEvent = ([y, m, d]: [number, number, number] = originDate): EventConfig => ({
-  title: 'Palettblad',
-  desc: renderWaterLevel(1) + `\nEj mycket vatten\nJorden skall hållas lätt fuktig`.replaceAll('\n', NEWLINE),
-  beginDate: [y, m, d],
-  endDate: [y, m, d + 1],
-  rrule: {
+const plants: Plant[] = [
+  /**
+   * Strandkastanj
+   *   Låt jorden torka mellan vattningarna
+   *   En generös klunk vatten var tredje vecka
+   *   Spraya med ljummet vatten
+   *   Fläta!
+   */
+  {
+    title: 'Strandkastanj',
+    description: ['En generös klunk vatten var tredje vecka','Låt jorden torka mellan vattningarna','Spraya med ljummet vatten'],
+    freq: 'WEEKLY',
+    interval: 3,
+  },
+  /**
+   * Monstera
+   *   Spraya bladen oftare
+   *   Vattna 2-3 ggr i månaden
+   *   Inte direkt solljus
+   */
+  {
+    title: 'Monstera',
+    description: ['Spraya bladen oftare'],
+    freq: 'WEEKLY',
+    interval: 2,
+  },
+  /**
+   * Palettblad
+   *   Ej mycket vatten, men lite och ofta (jorden skall vara lätt fuktig)
+   *   Gillar ljus
+   */
+  {
+    title: 'Palettblad',
+    description: ['Ej mycket vatten','Jorden skall hållas lätt fuktig'],
     freq: 'DAILY',
-    interval: 4
+    interval: 4,
   },
-  alarm: {
-    desc: 'Dags att vattna: Palettblad',
-    advance: 0
-  },
-});
-
-/*
-Elefantöra
-  Halvljust läge
-  Hålla lagom vattnad (klarar att torka ut mellan vattningar)
-  Vattna 1-2 gånger i veckan beroende på säsong
-  Spraya gärna bladen
-*/
-const createElefantoeraRepeatedEvent = ([y, m, d]: [number, number, number] = originDate): EventConfig => ({
-  title: 'Elefantöra',
-  desc: renderWaterLevel(2) + `\nHålla lagom vattnad\n(Klarar att torka ut mellan vattningar)\nSpraya gärna bladen`.replaceAll('\n', NEWLINE),
-  beginDate: [y, m, d],
-  endDate: [y, m, d + 1],
-  rrule: {
+  /**
+   * Elefantöra
+   *   Halvljust läge
+   *   Hålla lagom vattnad (klarar att torka ut mellan vattningar)
+   *   Vattna 1-2 gånger i veckan beroende på säsong
+   *   Spraya gärna bladen
+   */
+  {
+    title: 'Elefantöra',
+    description: ['Hålla lagom vattnad', '(Klarar att torka ut mellan vattningar)','Spraya gärna bladen'],
     freq: 'WEEKLY',
-    interval: 1
+    interval: 1,
   },
-  alarm: {
-    desc: 'Dags att vattna: Elefantöra',
-    advance: 0
-  },
-});
+];
 
-
-const eventConfigCreators = [createStrandkastanjRepeatedEvent, createMonsteraRepeatedEvent, createPalettbladRepeatedEvent, createElefantoeraRepeatedEvent]
 
 
 Deno.serve((req: Request) => {
-  const calendar = new Calendar(eventConfigCreators.map(fn => new Event(fn(originDate))));
+  const events = plants.map((plant) => new Event(createRepeatedEvent(plant, ORIGIN_DATE)));
+  const calendar = new Calendar(events);
+
   return new Response(calendar.toString())
 });
-
