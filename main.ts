@@ -12,14 +12,15 @@ interface RepeatConfig {
 interface Plant extends RepeatConfig {
   title: string;
   description: string[];
+  waterLevel: number;
 }
 
 const createRepeatedEvent = (
-  {description, interval, freq, title}: Plant,
+  {description, interval, freq, title, waterLevel}: Plant,
   [y, m, d]: DateTriple
 ): EventConfig => ({
   title: title,
-  desc: [renderWaterLevel(interval), ...description].join('\\n'),
+  desc: [renderWaterLevel(waterLevel), ...description].join('\\n'),
   beginDate: [y, m, d],
   endDate: [y, m, d + 1],
   rrule: {freq, interval},
@@ -44,6 +45,7 @@ const plants: Plant[] = [
     description: ['En generös klunk vatten var tredje vecka','Låt jorden torka mellan vattningarna','Spraya med ljummet vatten'],
     freq: 'WEEKLY',
     interval: 3,
+    waterLevel: 5,
   },
   /**
    * Monstera
@@ -56,6 +58,7 @@ const plants: Plant[] = [
     description: ['Spraya bladen oftare'],
     freq: 'WEEKLY',
     interval: 2,
+    waterLevel: 2,
   },
   /**
    * Palettblad
@@ -67,6 +70,7 @@ const plants: Plant[] = [
     description: ['Ej mycket vatten','Jorden skall hållas lätt fuktig'],
     freq: 'DAILY',
     interval: 4,
+    waterLevel: 1
   },
   /**
    * Elefantöra
@@ -80,6 +84,7 @@ const plants: Plant[] = [
     description: ['Hålla lagom vattnad', '(Klarar att torka ut mellan vattningar)','Spraya gärna bladen'],
     freq: 'WEEKLY',
     interval: 1,
+    waterLevel: 2
   },
 ];
 
