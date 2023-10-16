@@ -6,7 +6,7 @@ import {
 
 const NEWLINE = "\\n";
 const drop = "💧";
-const originDate: [number, number, number] = [2023, 10, 15];
+const originDate: [number, number, number] = [2023, 10, 16];
 
 const renderWaterLevel = (count: number) => drop.repeat(count);
 
@@ -18,7 +18,7 @@ Strandkastanj
   Fläta!
  */
 const createStrandkastanjRepeatedEvent = ([y, m, d]: [number, number, number] = originDate): EventConfig => ({
-  title: 'Dags att vattna: Strandkastanj',
+  title: 'Strandkastanj',
   desc: renderWaterLevel(5) + `\nEn generös klunk vatten var tredje vecka\nLåt jorden torka mellan vattningarna\nSpraya med ljummet vatten`.replaceAll('\n', NEWLINE),
   beginDate: [y, m, d],
   endDate: [y, m, d + 1],
@@ -39,7 +39,7 @@ Monstera
   Inte direkt solljus
 */
 const createMonsteraRepeatedEvent = ([y, m, d]: [number, number, number] = originDate): EventConfig => ({
-  title: 'Dags att vattna: Monstera',
+  title: 'Monstera',
   desc: renderWaterLevel(2) + '\nSpraya bladen oftare'.replaceAll('\n', NEWLINE),
   beginDate: [y, m, d],
   endDate: [y, m, d + 1],
@@ -59,7 +59,7 @@ Palettblad
   Gillar ljus
 */
 const createPalettbladRepeatedEvent = ([y, m, d]: [number, number, number] = originDate): EventConfig => ({
-  title: 'Dags att vattna: Palettblad',
+  title: 'Palettblad',
   desc: renderWaterLevel(1) + `\nEj mycket vatten\nJorden skall hållas lätt fuktig`.replaceAll('\n', NEWLINE),
   beginDate: [y, m, d],
   endDate: [y, m, d + 1],
@@ -81,7 +81,7 @@ Elefantöra
   Spraya gärna bladen
 */
 const createElefantoeraRepeatedEvent = ([y, m, d]: [number, number, number] = originDate): EventConfig => ({
-  title: 'Dags att vattna: Elefantöra',
+  title: 'Elefantöra',
   desc: renderWaterLevel(2) + `\nHålla lagom vattnad\n(Klarar att torka ut mellan vattningar)\nSpraya gärna bladen`.replaceAll('\n', NEWLINE),
   beginDate: [y, m, d],
   endDate: [y, m, d + 1],
